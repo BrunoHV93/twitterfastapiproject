@@ -122,3 +122,12 @@ def update_a_user():
     pass
 
 ## Tweets
+
+@app.get(
+    path="/",
+    status_code=status.HTTP_200_OK,
+    summary="Show all tweets",
+    tags=["Tweets"]
+)
+def show_all_tweets():
+    pass
