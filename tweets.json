@@ -1,1 +1,41 @@
-[]
+[
+    {
+        "tweet_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        "content": "hola gola",
+        "created_at": "2022-06-26 23:29:17.686790",
+        "updated_at": "2022-06-27 04:29:31.159000+00:00",
+        "by": {
+            "user_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            "email": "user@example.com",
+            "first_name": "string",
+            "last_name": "string",
+            "birth_date": "2022-06-27"
+        }
+    },
+    {
+        "tweet_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        "content": "Segundo twett",
+        "created_at": "2022-06-26 23:29:17.686790",
+        "updated_at": "2022-06-27 04:31:05.372000+00:00",
+        "by": {
+            "user_id": "3fa85f69-5717-4562-b3fc-2c963f66afa6",
+            "email": "user@example.com",
+            "first_name": "sam",
+            "last_name": "son",
+            "birth_date": "2022-06-27"
+        }
+    },
+    {
+        "tweet_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        "content": "Menos es m\u00e1s",
+        "created_at": "2022-06-26 23:29:17.686790",
+        "updated_at": "2022-06-27 04:31:37.075000+00:00",
+        "by": {
+            "user_id": "3fa85f67-5717-4562-b3fc-2c963f66afa6",
+            "email": "user@example.com",
+            "first_name": "seg",
+            "last_name": "string",
+            "birth_date": "2022-06-27"
+        }
+    }
+]
