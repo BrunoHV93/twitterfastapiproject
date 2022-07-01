@@ -131,7 +131,7 @@ def show_all_users():
     """
     Show all users
 
-    This path opetarion show all users in the app
+    This path operation show all users in the app
 
     Parameters:
         -
@@ -145,7 +145,6 @@ def show_all_users():
     """
     with open("users.json", "r", encoding="utf-8") as f:
         results = json.loads(f.read())
-        print(results)
         return results
 
 ### Show a user
@@ -171,7 +170,7 @@ def show_a_user(
     This path opetarion show an specific user in the app
 
     Parameters:
-        -
+        - user_id: int
 
     Retursn a json list with all users in the app, with the following keys:
         - user_id: UUID
@@ -192,14 +191,44 @@ def show_a_user(
 ### Delete a user
 
 @app.delete(
-    path="/users/{users_id}/delete",
-    response_model=User,
+    path="/users/{user_id}/delete",
     status_code=status.HTTP_200_OK,
     summary="Delete a User",
     tags=["Users"]
 )
-def delete_a_user():
-    pass
+def delete_a_user(
+    user_id: int = Path(
+        ...,
+        ge=0,
+        title="User ID",
+        description="This is the User ID"
+    )
+    ):
+    """
+    Delete a user
+
+    This path operation deletes an specific user in the app
+
+    Parameters:
+        - user_id: int
+
+    Returns a json list with the User ID and a message:
+        -
+    """
+    
+    with open("users.json", "r+", encoding="utf-8") as f:
+        results = json.loads(f.read())
+        if user_id >= len(results):
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="This User doesn´t exist"
+            )
+        else:
+            results.pop(user_id)
+            f.truncate(0)
+            f.seek(0)
+            f.write(json.dumps(results))
+        return {user_id:"User deleted successfully"}  
 
 ### Update a user
 
