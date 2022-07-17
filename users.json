@@ -17,10 +17,26 @@
     },
     {
         "user_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        "email": "mir@example.com",
-        "first_name": "Maura",
-        "last_name": "Inata",
-        "birth_date": "2022-06-27",
-        "password": "stringasfdfa"
+        "email": "dulcecitos@example.com",
+        "first_name": "Bombon",
+        "last_name": "Delicioso",
+        "birth_date": "2022-05-07",
+        "password": "stringst"
+    },
+    {
+        "user_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        "email": "excelsor@example.com",
+        "first_name": "mega",
+        "last_name": "ultra",
+        "birth_date": "2022-07-08",
+        "password": "stringst"
+    },
+    {
+        "user_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        "email": "hrlo@example.com",
+        "first_name": "totis",
+        "last_name": "strong",
+        "birth_date": "2022-07-08",
+        "password": "stringst"
     }
 ]

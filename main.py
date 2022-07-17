@@ -82,15 +82,15 @@ def signup(user: UserRegister = Body(...)):
     This path operation register a user in the app
 
     Parameters:
-        -Request body parameter
-            -user: UserRegister
+        - Request body parameter
+            - user: UserRegister
     
     Returns a json with the basic user information:
         - user_id: UUID
         - email: EmailSt
         - first_name: str
         - last_name: str
-        - birth_date: str
+        - birth_date: date
     """
     # Tenemos los usuarios a cargar en un archivo (normalmente, no es así, provienen de base de datos), leemos archivo y
     # metemos resultado en una variable, pero como queremos manejar jsons metemos json.loads
@@ -100,6 +100,8 @@ def signup(user: UserRegister = Body(...)):
         user_dict["user_id"] = str(user_dict["user_id"])
         user_dict["birth_date"] = str(user_dict["birth_date"])
         results.append(user_dict)
+        # Para limpiar archivo
+        f.truncate(0)
         # Para moverse a inicio del archivo, se pone cero para ir a bite cero
         f.seek(0)
         f.write(json.dumps(results))
@@ -136,7 +138,7 @@ def show_all_users():
     Parameters:
         -
 
-    Retursn a json list with all users in the app, with the following keys:
+    Returns a json list with all users in the app, with the following keys:
         - user_id: UUID
         - email: EmailSt
         - first_name: str
@@ -172,12 +174,12 @@ def show_a_user(
     Parameters:
         - user_id: int
 
-    Retursn a json list with all users in the app, with the following keys:
+    Returns a json list with all users in the app, with the following keys:
         - user_id: UUID
         - email: EmailSt
         - first_name: str
         - last_name: str
-        - birth_date: str
+        - birth_date: date
     """
     with open("users.json", "r", encoding="utf-8") as f:
         results = json.loads(f.read())
@@ -233,14 +235,58 @@ def delete_a_user(
 ### Update a user
 
 @app.put(
-    path="/users/{users_id}/update",
+    path="/users/{user_id}/update",
     response_model=User,
     status_code=status.HTTP_200_OK,
     summary="Update a User",
     tags=["Users"]
 )
-def update_a_user():
-    pass
+def update_a_user(
+    user_id: int = Path(
+        ...,
+        ge=0,
+        title="User ID",
+        description="This is the User ID"
+    ),
+    user: UserRegister = Body(...)
+    ):
+    """
+    Update a user
+
+    This path operation updates an specific user in the app
+
+    Parameters:
+        - user_id: int
+        - Request body parameter
+            - user: UserRegister
+
+    Returns a json with the new user info in the app, using the following keys:
+        - user_id: UUID
+        - email: EmailSt
+        - first_name: str
+        - last_name: str
+        - birth_date: date
+    """
+    with open("users.json", "r+", encoding="utf-8") as f:
+        results = json.loads(f.read())
+        if user_id not in range (0,len(results)):
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="This User doesn´t exist"
+            )
+        else:
+            user_dict = user.dict()
+            user_dict["user_id"] = str(user_dict["user_id"])
+            user_dict["birth_date"] = str(user_dict["birth_date"])
+            results[user_id] = user_dict
+            f.truncate(0)
+            f.seek(0)
+            f.write(json.dumps(results))            
+
+        return results[user_id]
+
+
+
 
 
 ## Tweets
@@ -255,7 +301,24 @@ def update_a_user():
     tags=["Tweets"]
 )
 def home():
-    pass
+    """
+    Show all tweets
+
+    This path operation show all tweets in the app
+
+    Parameters:
+        -
+
+    Returns a json list with all tweets in the app, with the following keys:
+        - user_id: UUID
+        - email: EmailSt
+        - first_name: str
+        - last_name: str
+        - birth_date: str
+    """
+    with open("users.json", "r", encoding="utf-8") as f:
+        results = json.loads(f.read())
+        return results
 
 ### Post a tweet
 
