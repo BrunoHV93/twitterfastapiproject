@@ -310,13 +310,13 @@ def home():
         -
 
     Returns a json list with all tweets in the app, with the following keys:
-        - user_id: UUID
-        - email: EmailSt
-        - first_name: str
-        - last_name: str
-        - birth_date: str
+        - tweet_id: UUID
+        - content: str
+        - created_at: str
+        - updated_at: str
+        - by: User
     """
-    with open("users.json", "r", encoding="utf-8") as f:
+    with open("tweets.json", "r", encoding="utf-8") as f:
         results = json.loads(f.read())
         return results
 
@@ -370,8 +370,39 @@ def post(tweet: Tweet = Body(...)):
     summary="Show a tweet",
     tags=["Tweets"]
 )
-def show_a_tweet():
-    pass
+def show_a_tweet(
+    tweet_id: int = Path (
+        ...,
+        gt=0,
+        title="Tweet ID",
+        description= "This is the Tweet ID" 
+    )
+    ):
+    """
+    Show a tweet
+
+    This path operation show a tweet in the app
+
+    Parameters:
+        - tweet_id: int
+
+    Returns a json list with a tweet in the app, with the following keys:
+        - tweet_id: UUID
+        - content: str
+        - created_at: str
+        - updated_at: str
+        - by: User
+    """
+    with open("tweets.json", "r", encoding="utf-8") as f:
+        results = json.loads(f.read())
+        if tweet_id >= len(results):
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="This Tweet doesn´t exist"
+            )
+        return results[tweet_id]
+
+
 
 ### Delete a tweet
 
