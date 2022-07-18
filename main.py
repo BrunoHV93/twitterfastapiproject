@@ -214,8 +214,9 @@ def delete_a_user(
     Parameters:
         - user_id: int
 
-    Returns a json list with the User ID and a message:
-        -
+    Returns a json with the User ID and a message:
+        - user_id: int
+        - User deleted successfully
     """
     
     with open("users.json", "r+", encoding="utf-8") as f:
@@ -355,8 +356,8 @@ def post(tweet: Tweet = Body(...)):
         tweet_dict["updated_at"] = str(tweet_dict["updated_at"])
         tweet_dict["by"]["user_id"] = str(tweet_dict["by"]["user_id"])
         tweet_dict["by"]["birth_date"] = str(tweet_dict["by"]["birth_date"])
-
         results.append(tweet_dict)
+        f.truncate(0)
         f.seek(0)
         f.write(json.dumps(results))
         return tweet
@@ -403,7 +404,6 @@ def show_a_tweet(
         return results[tweet_id]
 
 
-
 ### Delete a tweet
 
 @app.delete(
@@ -413,8 +413,41 @@ def show_a_tweet(
     summary="Delete a tweet",
     tags=["Tweets"]
 )
-def delete_a_tweet():
-    pass
+def delete_a_tweet(
+    tweet_id: int = Path(
+        ...,
+        ge=0,
+        title="Tweet ID",
+        description= "This is the Tweet ID"         
+    )
+    ):
+    """
+    Delete a tweet
+
+    This path operation deletes an specific tweet in the app
+
+    Parameters:
+        - user_id: int
+
+    Returns a json with the User ID and a message:
+        - user_id: int
+        - User deleted successfully
+    """
+    
+    with open("tweets.json", "r+", encoding="utf-8") as f:
+        results = json.loads(f.read())
+        if tweet_id >= len(results):
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="This Tweet doesn´t exist"
+            )
+        else:
+            results.pop(tweet_id)
+            f.truncate(0)
+            f.seek(0)
+            f.write(json.dumps(results))
+        return {"key":"String"}
+
 
 ### Update a tweet
 
@@ -425,5 +458,50 @@ def delete_a_tweet():
     summary="Update a tweet",
     tags=["Tweets"]
 )
-def update_a_tweet():
-    pass
+def update_a_tweet(
+    tweet_id: int = Path(
+        ...,
+        ge=0,
+        title="Tweet ID",
+        description="This is the Tweet ID"
+    ),
+    tweet: Tweet = Body(...)
+    ):
+    """
+    Update a tweet
+
+    This path operation updates an specific tweet in the app
+
+    Parameters:
+        - tweet_id: int
+        - Request body parameter
+            - tweet: Tweet
+
+    Returns a json with the new tweet info in the app, using the following keys:
+        - tweet_id: UUID
+        - content: str
+        - created_at: str
+        - updated_at: str
+        - by: User
+    """
+    with open("tweets.json", "r+", encoding="utf-8") as f:
+        results = json.loads(f.read())
+        if tweet_id not in range (0,len(results)):
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="This Tweet doesn´t exist"
+            )
+        else:
+            tweet_dict = tweet.dict()
+            tweet_dict["tweet_id"] = str(tweet_dict["tweet_id"])
+            tweet_dict["created_at"] = str(tweet_dict["created_at"])
+            tweet_dict["updated_at"] = str(tweet_dict["updated_at"])
+            tweet_dict["by"]["user_id"] = str(tweet_dict["by"]["user_id"])
+            tweet_dict["by"]["birth_date"] = str(tweet_dict["by"]["birth_date"])
+
+            results[tweet_id] = tweet_dict
+            f.truncate(0)
+            f.seek(0)
+            f.write(json.dumps(results))            
+
+        return results[tweet_id]
