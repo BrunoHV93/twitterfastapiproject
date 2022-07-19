@@ -4,7 +4,6 @@ This project was made as part of Platzi's "Curso de FastAPI" and it´s objective
 
 - Interactive Documentation
 - Path operation
-- Tweet deleted successfully
 - Request and Response Body
 - Models and Response Models
 - Validations
