@@ -374,7 +374,7 @@ def post(tweet: Tweet = Body(...)):
 def show_a_tweet(
     tweet_id: int = Path (
         ...,
-        gt=0,
+        ge=0,
         title="Tweet ID",
         description= "This is the Tweet ID" 
     )
@@ -408,32 +408,30 @@ def show_a_tweet(
 
 @app.delete(
     path="/tweets/{tweet_id}/delete",
-    response_model=Tweet,
     status_code=status.HTTP_200_OK,
     summary="Delete a tweet",
     tags=["Tweets"]
 )
 def delete_a_tweet(
-    tweet_id: int = Path(
+    tweet_id: int = Path (
         ...,
-        ge=0,
+        gt=0,
         title="Tweet ID",
-        description= "This is the Tweet ID"         
+        description= "This is the Tweet ID" 
     )
     ):
     """
     Delete a tweet
 
-    This path operation deletes an specific tweet in the app
+    This path operation deletes a tweet in the app
 
     Parameters:
-        - user_id: int
+        - tweet_id: int
 
-    Returns a json with the User ID and a message:
-        - user_id: int
-        - User deleted successfully
-    """
-    
+    Returns a json with a Tweet ID and a message:
+        - tweet_id: int
+        - Tweet deleted successfully
+    """    
     with open("tweets.json", "r+", encoding="utf-8") as f:
         results = json.loads(f.read())
         if tweet_id >= len(results):
@@ -446,8 +444,8 @@ def delete_a_tweet(
             f.truncate(0)
             f.seek(0)
             f.write(json.dumps(results))
-        return {"key":"String"}
 
+        return {tweet_id:"Tweet deleted successfully"}
 
 ### Update a tweet
 
